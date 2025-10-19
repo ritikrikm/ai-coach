@@ -8,6 +8,7 @@ const levelOrder: Record<Level, number> = {
   info: 2,
   debug: 3,
 };
+//
 const min = levelOrder[env.LOG_LEVEL as Level] ?? 2;
 function logAt(level: Level, ...args: any[]) {
   const cur = levelOrder[level];
