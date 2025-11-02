@@ -1,4 +1,4 @@
-import { streamChat } from "../clients/llm";
+import { streamChat,ChatMsg } from "../clients/llm";
 
 export function interviewerPrompt(context: string, role: string) {
   return [
@@ -13,10 +13,10 @@ Return only the question sentence, no preface.`,
       role: "user",
       content: `CONTEXT:\n${context}\n\nAsk the next interview question.`,
     },
-  ] as const;
+  ] 
 }
 
 export async function interviewerAskStream(context: string, role: string) {
-  const messages = interviewerPrompt(context, role);
-  return streamChat(messages as any);
+  const messages= interviewerPrompt(context, role) as ChatMsg[];
+  return streamChat(messages);
 }

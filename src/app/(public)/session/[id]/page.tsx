@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter, useParams } from 'next/navigation';
+import {  useParams } from 'next/navigation';
 import React, { useState, useEffect, useRef } from 'react';
 import Button from '@/components/ui/Button';
 import Textarea from '@/components/ui/Textarea';
@@ -132,11 +132,11 @@ export default function SessionPage() {
                     // fallback to empty string if not present
                     turnIdRef.current = '';
                 }
-            } catch (err) {
+            } catch (err:unknown) {
                 // If persisting the turn fails, still allow the user to continue, but no turnId
                 turnIdRef.current = '';
             }
-        } catch (err: any) {
+        } catch (err: unknown) {
             setError('Failed to fetch question.');
         } finally {
             setLoadingQuestion(false);
@@ -171,7 +171,7 @@ export default function SessionPage() {
 
             setEvaluation(res.evaluation ?? null);
             setTutor(res.tutor ?? null);
-        } catch (err: any) {
+        } catch (err: unknown) {
             setError('Failed to evaluate answer.');
         } finally {
             setLoadingEval(false);

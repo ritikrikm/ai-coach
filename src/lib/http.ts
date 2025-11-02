@@ -33,7 +33,8 @@ export function withErrorHandling<
 export async function readJson<T>(req: Request): Promise<T> {
   try {
     return await req.json();
-  } catch (error) {
+  } catch (error:unknown) {
+    if(error instanceof Error) throw new InternalError("Invalid Json Body");
     throw new InternalError("Invalid Json Body");
-  }
+}
 }

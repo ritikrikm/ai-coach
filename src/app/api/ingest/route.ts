@@ -2,7 +2,7 @@ import { withErrorHandling, jsonOk, readJson } from "@/lib/http";
 import { z, parse } from "@/lib/validation";
 import { rateLimit } from "@/lib/rate-limit";
 import { ingestQuestions } from "@/lib/services/ingest";
-
+import { withSession } from "@/lib/repositories/sessions";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
@@ -11,7 +11,8 @@ const Body = z.object({
   limit: z.number().int().min(1).max(10).optional(),
 });
 
-export const POST = withErrorHandling(async (req: Request) => {
+export const POST = withErrorHandling(
+  withSession(async (req: Request) => {
   rateLimit(
     `ingest:${req.headers.get("x-forwarded-for") ?? "local"}`,
     5,
@@ -25,4 +26,5 @@ export const POST = withErrorHandling(async (req: Request) => {
   );
 
   return jsonOk({ inserted, items });
-});
+})
+);

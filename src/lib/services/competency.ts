@@ -25,7 +25,7 @@ Job Description:
   const completion = await openai.chat.completions.create({
     model: "gpt-4o-mini",
     messages: [{ role: "user", content: prompt }],
-    temperature: 0,
+    temperature: 0,//determnistic output
     response_format: { type: "json_object" },
   });
 

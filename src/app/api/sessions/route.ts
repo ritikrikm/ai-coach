@@ -18,6 +18,6 @@ export const POST = withErrorHandling(async (req: Request) => {
     60_000
   );
   const body = parse(Body, await readJson(req));
-  const session = await createSession(body.role, body.jd);
-  return jsonOk({ session });
+  const {session,accessToken} = await createSession(body.role, body.jd);
+  return jsonOk({ session,accessToken });
 });

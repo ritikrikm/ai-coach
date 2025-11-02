@@ -13,7 +13,20 @@ type Skill = {
     skill: string;
     subskills: string[];
 };
-
+type skill = {
+    id: string;
+    name: string;
+    
+}
+type subskills = {
+    id: string;
+    skill_id: string;
+    name: string;
+}
+interface CompetencyResponse {
+    skills: skill[];
+    subskills: subskills[];
+}
 
 export default function LandingPage() {
     const [role, setRole] = useState<string>("");
@@ -30,7 +43,7 @@ export default function LandingPage() {
         setError(null);
         setSkills(null);
         try {
-            const resp = await postJSON<{ ok: boolean; data: any }>("/api/competency", { jd });
+            const resp = await postJSON<{ ok: boolean; data: CompetencyResponse }>("/api/competency", { jd });
             if (!resp.ok) throw new Error("Failed to analyze JD");
             // Map skills and subskills from the new response shape
             // resp.data.skills: [{ id, name, ... }], resp.data.subskills: [{ id, skill_id, name, ... }]
@@ -43,13 +56,15 @@ export default function LandingPage() {
                 subskillsBySkill[sub.skill_id].push(sub.name);
             }
             // Build Skill[] as expected by the rest of the code
-            const mappedSkills: Skill[] = skillsArr.map((skill: any) => ({
+            const mappedSkills: Skill[] = skillsArr.map((skill: skill) => ({
                 skill: skill.name,
                 subskills: subskillsBySkill[skill.id] || [],
             }));
             setSkills(mappedSkills);
-        } catch (err: any) {
-            setError(err.message || "Something went wrong");
+        } catch (err: unknown) {
+            if(err instanceof Error){     
+                setError(err.message || "Something went wrong");
+            }
         } finally {
             setLoading(false);
         }
@@ -61,8 +76,10 @@ export default function LandingPage() {
         try {
             const { id } = await createSession(role, jd);
             router.push(`/session/${id}`);
-        } catch (err: any) {
-            setError(err.message || "Failed to start interview");
+        } catch (err: unknown) {
+            if(err instanceof Error){
+                setError(err.message || "Failed to start interview");
+            }
         } finally {
             setLoading(false);
         }

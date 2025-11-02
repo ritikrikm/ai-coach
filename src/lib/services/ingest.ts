@@ -12,10 +12,11 @@ import { insertDocs } from "../repositories/doc";
  */
 export async function ingestQuestions(
   query: string,
-  limit = 8
+  limit = 8,
+  page=1
 ): Promise<{ inserted: number; items: SearchItem[] }> {
   //step1
-  const results = await googleSearch(query, limit);
+  const results = await googleSearch(query, limit,page);
   //create numerical values of text(embedding)
   const itemsWithEmbeddings = await Promise.all(
     results.map(async (r) => ({

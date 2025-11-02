@@ -9,7 +9,8 @@ type GoogleResult = {
 
 export async function googleSearch(
   query: string,
-  limit = 8
+  limit = 8,
+  page=1
 ): Promise<SearchItem[]> {
   const key = env.GOOGLE_SEARCH_API_KEY;
   const cx = env.GOOGLE_SEARCH_CX;
@@ -32,8 +33,9 @@ export async function googleSearch(
   }
 
   const url = "https://www.googleapis.com/customsearch/v1";
+  const start = (page - 1) *limit + 1;
   const data = await ofetch<GoogleResult>(url, {
-    query: { key, cx, q: query, num: Math.min(limit, 10) },
+    query: { key, cx, q: query, num: Math.min(limit, 10),start },
   });
 
   const items = (data.items ?? [])

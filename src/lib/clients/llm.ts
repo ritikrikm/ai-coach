@@ -32,7 +32,7 @@ export async function streamChat(
   model = "gpt-4o-mini",
   temperature = 0
 ) {
-  const started = Date.now();
+  // const started = Date.now();
   const stream = await openai.chat.completions.create({
     model,
     temperature,

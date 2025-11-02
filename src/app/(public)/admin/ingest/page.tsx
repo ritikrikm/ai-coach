@@ -36,8 +36,11 @@ export default function AdminIngestPage() {
                 throw new Error(resp.error || "Ingestion failed");
             }
             setResult(resp.data);
-        } catch (err: any) {
-            setError(err.message || "Something went wrong");
+        } catch (err: unknown) {
+            if( err instanceof Error){
+                setError(err.message || "Something went wrong");
+            }
+          
         } finally {
             setLoading(false);
         }
